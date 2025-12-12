@@ -14,19 +14,31 @@ import java.io.IOException;
 public class ResponseJsonServlet extends HttpServlet {
 
     private ObjectMapper objectMapper = new ObjectMapper();
+//
+//    @Override
+//    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        //Content-Type: application/json
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("utf-8");
+//
+//        HelloData helloData = new HelloData();
+//        helloData.setUsername("ban");
+//        helloData.setAge(27);
+//
+//        //{"username":"ban","age":27}
+//        String result = objectMapper.writeValueAsString(helloData);
+//        response.getWriter().write(result);
+//    }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Content-Type: application/json
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
-        HelloData helloData = new HelloData();
-        helloData.setUsername("ban");
-        helloData.setAge(27);
+        HelloData helloData = new HelloData("kim", 20);
 
-        //{"username":"ban","age":27}
         String result = objectMapper.writeValueAsString(helloData);
         response.getWriter().write(result);
+
     }
 }
