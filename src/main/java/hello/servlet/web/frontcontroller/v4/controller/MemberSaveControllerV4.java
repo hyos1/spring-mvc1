@@ -14,7 +14,6 @@ public class MemberSaveControllerV4 implements ControllerV4 {
     public String process(Map<String, String> paramMap, Map<String, Object> model) {
         String username = paramMap.get("username");
         int age = Integer.parseInt(paramMap.get("age"));
-
         Member member = new Member(username, age);
         memberRepository.save(member);
 
