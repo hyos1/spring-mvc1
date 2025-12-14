@@ -2,7 +2,6 @@ package hello.servlet.web.frontcontroller.v5;
 
 import hello.servlet.web.frontcontroller.ModelView;
 import hello.servlet.web.frontcontroller.MyView;
-import hello.servlet.web.frontcontroller.v3.ControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberFormControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberListControllerV3;
 import hello.servlet.web.frontcontroller.v3.controller.MemberSaveControllerV3;
@@ -35,11 +34,12 @@ public class FrontControllerServletV5 extends HttpServlet {
     }
 
     private void initHandlerMappingMap() {
+        //V3 버전
         handlerMappingMap.put("/front-controller/v5/v3/members/new-form", new MemberFormControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members/save", new MemberSaveControllerV3());
         handlerMappingMap.put("/front-controller/v5/v3/members", new MemberListControllerV3());
 
-        //V4 추가
+        //V4 버전
         handlerMappingMap.put("/front-controller/v5/v4/members/new-form", new MemberFormControllerV4());
         handlerMappingMap.put("/front-controller/v5/v4/members/save", new MemberSaveControllerV4());
         handlerMappingMap.put("/front-controller/v5/v4/members", new MemberListControllerV4());
@@ -63,28 +63,29 @@ public class FrontControllerServletV5 extends HttpServlet {
 
         ModelView mv = adapter.handle(request, response, handler);
 
-        //new-form, save, list
-        String viewName = mv.getViewName();//논리 이름 ex new-form
-        MyView view = viewResolver(viewName);
+        String viewName = mv.getViewName();
+        MyView myView = viewResolver(viewName);
 
-        view.render(mv.getModel(), request, response);
-    }
-
-    private MyHandlerAdapter getHandlerAdapter(Object handler) {
-        for (MyHandlerAdapter adapter : handlerAdapters) {
-            if (adapter.supports(handler)) {
-                return adapter;
-            }
-        }
-        throw new IllegalArgumentException("handler adapter를 찾을 수 없습니다. handler = " + handler);
+        myView.render(mv.getModel(), request, response);
     }
 
     private Object getHandler(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        return handlerMappingMap.get(requestURI);
+        Object handler = handlerMappingMap.get(requestURI);
+        return handler;
     }
 
-    private MyView viewResolver(String viewName) {
-        return new MyView("/WEB-INF/views/" + viewName + ".jsp");
+    private MyHandlerAdapter getHandlerAdapter(Object handler) {
+        for (MyHandlerAdapter adaptor : handlerAdapters) {
+            if (adaptor.supports(handler)) {
+                return adaptor;
+            }
+        }
+        throw new IllegalArgumentException("handler adapter를 찾을 수 없습니다. handler=" + handler);
+    }
+
+    private static MyView viewResolver(String viewName) {
+        String viewPath = "/WEB-INF/views/" + viewName + ".jsp";
+        return new MyView(viewPath);
     }
 }
