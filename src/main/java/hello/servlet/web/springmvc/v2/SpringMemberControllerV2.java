@@ -17,7 +17,7 @@ public class SpringMemberControllerV2 {
     private MemberRepository memberRepository = MemberRepository.getInstance();
 
     @RequestMapping("/new-form")
-    public ModelAndView process() {
+    public ModelAndView newForm() {
         return new ModelAndView("new-form");
     }
 

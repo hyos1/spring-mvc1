@@ -14,13 +14,13 @@ public class SpringMemberListControllerV1 {
 
     private MemberRepository memberRepository = MemberRepository.getInstance();
 
-    @RequestMapping("springmvc/v1/members")
+    @RequestMapping("/springmvc/v1/members")
     public ModelAndView process() {
-        List<Member> members = memberRepository.findAll();
-        ModelAndView mv = new ModelAndView("members");
-        mv.addObject("members", members);
-        mv.getModel().put("members", members);
 
+        List<Member> members = memberRepository.findAll();
+
+        ModelAndView mv = new ModelAndView("/members");
+        mv.addObject("members", members);
         return mv;
     }
 }
